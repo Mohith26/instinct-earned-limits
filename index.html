@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#fbfaf9" />
+  <title>Spending · Instinct</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;350;400;500;600&family=Newsreader:opsz,wght@6..72,300;6..72,400;6..72,600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar">
+      <nav aria-label="Main">
+        <img class="wordmark" src="assets/wordmark.svg" alt="Instinct" />
+        <div class="navgroup">
+          <a class="navlink" href="#">Workspace</a>
+          <a class="navlink" href="#">Vault</a>
+          <a class="navlink active" href="#" aria-current="page">Spending</a>
+          <a class="navlink" href="#">Trusted people</a>
+          <a class="navlink" href="#">Agent</a>
+          <a class="navlink" href="#">Voice</a>
+        </div>
+        <div class="navgroup">
+          <a class="navlink" href="#">Preferences</a>
+          <a class="navlink" href="#">Invite a friend</a>
+          <a class="navlink" href="#">Log out</a>
+        </div>
+        <div class="whoami"><span>Maya Chen</span><span>+1 (415) 555-0142</span></div>
+      </nav>
+    </aside>
+
+    <main class="main">
+      <div class="page" id="page">
+        <!-- Link balance -->
+        <section class="section">
+          <div class="section-head">
+            <div class="section-title">
+              <h2>Link balance</h2>
+              <p>Money your Instinct can spend for you. Held by Link, separate from your cards.</p>
+            </div>
+            <button class="btn secondary" type="button">Add money</button>
+          </div>
+          <div class="rows">
+            <div class="row">
+              <span class="row-icon brand-link" aria-hidden="true">
+                <svg viewBox="0 0 32 32" width="32" height="32"><rect width="32" height="32" rx="7" fill="#00D66F"/><text x="16" y="20.5" text-anchor="middle" font-family="Outfit, Arial, sans-serif" font-size="12" font-weight="700" fill="#011E0F">link</text></svg>
+              </span>
+              <div class="row-body"><span class="row-title">Spent from your balance</span><span class="row-meta" id="balanceMeta"></span></div>
+              <div class="row-end"><span class="value" id="balanceValue"></span></div>
+            </div>
+            <div class="row">
+              <span class="row-icon" aria-hidden="true"><i data-lucide="shield"></i></span>
+              <div class="row-body"><span class="row-title">Hard limit per purchase</span><span class="row-meta">Anything above this always waits for your approval, earned or not.</span></div>
+              <div class="row-end"><span class="value" id="hardCapValue"></span><button class="btn secondary" type="button">Change</button></div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Earned limits -->
+        <section class="section" id="earned">
+          <div class="section-head">
+            <div class="section-title">
+              <h2>Earned limits <span class="pill-beta">Beta</span></h2>
+              <p>Instinct stops texting you for approval only where your own answers show it's safe, and keeps asking when something looks off.</p>
+            </div>
+            <button class="switch on" id="earnedSwitch" role="switch" aria-checked="true" aria-label="Earned limits"><span></span></button>
+          </div>
+          <div class="metric">
+            <div class="metric-top">
+              <span class="metric-num" id="statAuto"></span>
+              <span class="metric-label" id="statAutoLabel"></span>
+            </div>
+            <div class="meter" id="meter" aria-hidden="true"></div>
+            <div class="legend"><span><i class="k-auto"></i>Bought without a text</span><span><i class="k-bad"></i>Unwanted</span><span><i class="k-ask"></i>Asked you</span></div>
+          </div>
+          <div class="rows stats">
+            <div class="row">
+              <span class="row-icon" aria-hidden="true"><i data-lucide="badge-check"></i></span>
+              <div class="row-body"><span class="row-title">Certified ceiling</span><span class="row-meta" id="statRiskLabel"></span></div>
+              <div class="row-end"><span class="value" id="statRisk"></span></div>
+            </div>
+            <div class="row">
+              <span class="row-icon" aria-hidden="true"><i data-lucide="message-square-text"></i></span>
+              <div class="row-body"><span class="row-title">Earned from your answers</span><span class="row-meta" id="statEvidenceLabel"></span></div>
+              <div class="row-end"><span class="value" id="statEvidence"></span></div>
+            </div>
+          </div>
+          <div class="tolerance">
+            <span class="tol-label">How often may Instinct get it wrong?</span>
+            <div class="segmented" id="alphaSeg" role="radiogroup" aria-label="Error tolerance">
+              <button type="button" role="radio" data-alpha="0.02">1 in 50</button>
+              <button type="button" role="radio" data-alpha="0.05">1 in 20</button>
+              <button type="button" role="radio" data-alpha="0.1">1 in 10</button>
+            </div>
+          </div>
+          <div class="rows" id="catRows"></div>
+        </section>
+
+        <!-- Replay -->
+        <section class="section">
+          <div class="section-head">
+            <div class="section-title">
+              <h2>Since you added Link balance</h2>
+              <p id="replayDesc"></p>
+            </div>
+          </div>
+          <div class="rows" id="replayRows"></div>
+          <details class="disclosure" id="diffDetails">
+            <summary><svg viewBox="0 0 8 8" class="tri"><path d="M2 1l4 3-4 3z"/></svg><span id="diffSummary"></span></summary>
+            <div class="difflist" id="diffList"></div>
+          </details>
+        </section>
+
+        <!-- Trust check -->
+        <section class="section">
+          <div class="section-head">
+            <div class="section-title">
+              <h2>Trust check</h2>
+              <p>Every answer you give and every return you make is checked against what earned limits expect. If they drift apart, earned limits pause and Instinct goes back to asking.</p>
+            </div>
+            <button class="btn secondary" type="button" id="simBtn">Simulate a change in habits</button>
+          </div>
+          <div class="rows">
+            <div class="row align-start">
+              <span class="row-icon" aria-hidden="true"><i data-lucide="activity"></i></span>
+              <div class="row-body">
+                <span class="row-title" id="trustTitle"></span>
+                <span class="row-meta" id="trustMeta"></span>
+                <div class="spark-wrap"><svg id="spark" class="spark" viewBox="0 0 600 120" preserveAspectRatio="none"></svg>
+                  <div class="spark-axis"><span id="sparkStart"></span><span id="sparkEnd"></span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- How it works -->
+        <section class="section">
+          <div class="section-head">
+            <div class="section-title">
+              <h2>How earned limits work</h2>
+              <p>The math behind each limit, and how it was tested.</p>
+            </div>
+            <button class="btn secondary" type="button" id="previewBtn">Preview an approval text</button>
+          </div>
+          <div class="rows" id="howRows"></div>
+        </section>
+
+        <footer class="footer">Unofficial concept demo by Mohith Gajjela. Not affiliated with Instinct. Synthetic data.</footer>
+      </div>
+    </main>
+  </div>
+
+  <div class="scrim" id="scrim" hidden>
+    <div class="dialog" role="dialog" aria-modal="true" aria-labelledby="dlgTitle">
+      <button class="dlg-close" id="dlgClose" aria-label="Close"><i data-lucide="x"></i></button>
+      <h3 id="dlgTitle">What Maya sees in Messages</h3>
+      <div class="thread" id="thread"></div>
+      <div class="approve-card" id="approveCard"></div>
+    </div>
+  </div>
+
+  <script src="https://unpkg.com/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+  <script src="data/data.js"></script>
+  <script type="module" src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,6 @@
+{
+  "name": "instinct-earned-limits",
+  "private": true,
+  "type": "module",
+  "scripts": { "test": "node --test test/earned.test.mjs", "generate": "node scripts/generate.mjs" }
+}
